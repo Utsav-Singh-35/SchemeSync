@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Scheme, automationAPI } from '@/lib/api';
+import { Scheme, automationAPI, extensionAPI } from '@/lib/api';
 import { BookmarkIcon as BookmarkOutline } from '@heroicons/react/24/outline';
 import { BookmarkIcon as BookmarkSolid, CpuChipIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
@@ -56,34 +56,40 @@ export default function SchemeCard({
                           `https://www.myscheme.gov.in/schemes/${scheme.slug}`;
     
     try {
-      toast.loading('Starting automated form filling...', { id: 'autofill' });
+      toast.loading('Checking SchemeSync Extension...', { id: 'autofill' });
       
-      const result = await automationAPI.fillForm(scheme.id.toString(), applicationUrl);
+      // Check if extension is available
+      const extensionStatus = await extensionAPI.getExtensionStatus();
       
-      if (result.success) {
-        toast.success(
-          `✅ ${result.data.fieldsFilled}/${result.data.fieldsFound} fields filled!`, 
-          { 
-            id: 'autofill',
-            duration: 4000
-          }
+      if (!extensionStatus.available) {
+        toast.error(
+          'SchemeSync Extension not found. Please install the extension to use auto-fill.', 
+          { id: 'autofill', duration: 5000 }
         );
         
-        // Open the browser session with pre-filled form
-        setTimeout(() => {
-          window.open(result.data.continueUrl, '_blank', 'noopener,noreferrer');
-        }, 1000);
-      } else {
-        toast.error('Auto-fill failed. Opening manual form...', { id: 'autofill' });
-        
-        // Fallback to manual application
+        // Open application URL manually
         setTimeout(() => {
           window.open(applicationUrl, '_blank', 'noopener,noreferrer');
-        }, 1500);
+        }, 1000);
+        return;
       }
+
+      toast.loading('Opening application with extension support...', { id: 'autofill' });
+      
+      // Use extension to open and handle the application
+      const result = await extensionAPI.triggerAutofill(scheme.id.toString(), applicationUrl);
+      
+      toast.success(
+        `✅ Application opened! The SchemeSync extension will automatically assist with form filling.`, 
+        { 
+          id: 'autofill',
+          duration: 4000
+        }
+      );
+      
     } catch (error: any) {
       console.error('Auto-fill error:', error);
-      toast.error('Auto-fill unavailable. Opening manual form...', { id: 'autofill' });
+      toast.error('Extension unavailable. Opening manual form...', { id: 'autofill' });
       
       // Fallback to manual application
       setTimeout(() => {

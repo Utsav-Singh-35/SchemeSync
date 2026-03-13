@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "SchemeSync Autofill Assistant",
+  "version": "1.0.0",
+  "description": "AI-powered form filling assistant for government scheme applications",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "http://localhost:3000/*",
+    "https://*/*",
+    "http://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "SchemeSync Autofill"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["uiOverlay.js", "domAnalyzer.js", "autofillEngine.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
