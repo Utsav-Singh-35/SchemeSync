@@ -6,19 +6,58 @@ const schemas = {
         email: Joi.string().email().required(),
         password: Joi.string().min(8).required(),
         name: Joi.string().min(2).max(100).required(),
-        age: Joi.number().integer().min(0).max(120).optional(),
-        date_of_birth: Joi.date().max('now').optional(),
-        gender: Joi.string().valid('male', 'female', 'other').optional(),
-        occupation: Joi.string().max(100).optional(),
-        annual_income: Joi.number().integer().min(0).optional(),
-        address: Joi.string().max(500).optional(),
-        district: Joi.string().max(100).optional(),
-        state: Joi.string().max(100).optional(),
-        category: Joi.string().valid('general', 'obc', 'sc', 'st', 'ews').optional(),
-        is_student: Joi.boolean().optional(),
-        is_farmer: Joi.boolean().optional(),
-        is_disabled: Joi.boolean().optional(),
-        phone_number: Joi.string().pattern(/^[0-9+\-\s()]+$/).optional()
+        age: Joi.alternatives().try(
+            Joi.number().integer().min(0).max(120),
+            Joi.string().allow('').optional()
+        ).optional(),
+        date_of_birth: Joi.alternatives().try(
+            Joi.date().max('now'),
+            Joi.string().allow('').optional()
+        ).optional(),
+        gender: Joi.alternatives().try(
+            Joi.string().valid('male', 'female', 'other'),
+            Joi.string().allow('').optional()
+        ).optional(),
+        occupation: Joi.alternatives().try(
+            Joi.string().max(100),
+            Joi.string().allow('').optional()
+        ).optional(),
+        annual_income: Joi.alternatives().try(
+            Joi.number().integer().min(0),
+            Joi.string().allow('').optional()
+        ).optional(),
+        address: Joi.alternatives().try(
+            Joi.string().max(500),
+            Joi.string().allow('').optional()
+        ).optional(),
+        district: Joi.alternatives().try(
+            Joi.string().max(100),
+            Joi.string().allow('').optional()
+        ).optional(),
+        state: Joi.alternatives().try(
+            Joi.string().max(100),
+            Joi.string().allow('').optional()
+        ).optional(),
+        category: Joi.alternatives().try(
+            Joi.string().valid('general', 'obc', 'sc', 'st', 'ews'),
+            Joi.string().allow('').optional()
+        ).optional(),
+        is_student: Joi.alternatives().try(
+            Joi.boolean(),
+            Joi.string().allow('').optional()
+        ).optional(),
+        is_farmer: Joi.alternatives().try(
+            Joi.boolean(),
+            Joi.string().allow('').optional()
+        ).optional(),
+        is_disabled: Joi.alternatives().try(
+            Joi.boolean(),
+            Joi.string().allow('').optional()
+        ).optional(),
+        phone_number: Joi.alternatives().try(
+            Joi.string().pattern(/^[0-9+\-\s()]+$/),
+            Joi.string().allow('').optional()
+        ).optional()
     }),
 
     login: Joi.object({
@@ -74,7 +113,17 @@ const validate = (schemaName) => {
             });
         }
 
-        const { error, value } = schema.validate(req.body, {
+        // Convert empty strings to undefined for optional fields
+        const cleanedBody = {};
+        for (const [key, value] of Object.entries(req.body)) {
+            if (value === '' || value === null) {
+                cleanedBody[key] = undefined;
+            } else {
+                cleanedBody[key] = value;
+            }
+        }
+
+        const { error, value } = schema.validate(cleanedBody, {
             abortEarly: false,
             stripUnknown: true
         });
