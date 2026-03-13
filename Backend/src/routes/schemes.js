@@ -11,23 +11,62 @@ const eligibilityEngine = new EligibilityEngine();
 // Search schemes with FTS5
 router.get('/search', optionalAuth, validateQuery('schemeSearch'), async (req, res) => {
     try {
-        const { query, category, limit, offset } = req.validatedQuery;
+        const { query, category, ministry, level, beneficiary, state, limit, offset } = req.validatedQuery;
         let schemes = [];
+        let total = 0;
+        let whereConditions = ['is_active = 1'];
+        let params = [];
 
         if (query) {
             // FTS5 search
             schemes = await db.searchSchemes(query, limit, offset);
-        } else if (category) {
-            // Category-based search
-            schemes = await db.getSchemesByCategory(category, limit, offset);
+            // Get total count for query
+            const countResult = await db.get(`
+                SELECT COUNT(*) as count 
+                FROM schemes_fts 
+                WHERE schemes_fts MATCH ?
+            `, [query]);
+            total = countResult?.count || 0;
         } else {
-            // Get all schemes
+            // Build WHERE clause for filters
+            if (category) {
+                whereConditions.push('(scheme_category LIKE ? OR tags LIKE ?)');
+                params.push(`%${category}%`, `%${category}%`);
+            }
+            if (ministry) {
+                whereConditions.push('ministry LIKE ?');
+                params.push(`%${ministry}%`);
+            }
+            if (level) {
+                whereConditions.push('level = ?');
+                params.push(level);
+            }
+            if (beneficiary) {
+                whereConditions.push('target_beneficiaries LIKE ?');
+                params.push(`%${beneficiary}%`);
+            }
+            if (state) {
+                whereConditions.push('(state = ? OR state = "All States" OR state IS NULL)');
+                params.push(state);
+            }
+
+            const whereClause = whereConditions.join(' AND ');
+
+            // Get schemes with filters
             schemes = await db.query(`
                 SELECT * FROM schemes 
-                WHERE is_active = 1 
+                WHERE ${whereClause}
                 ORDER BY last_updated DESC 
                 LIMIT ? OFFSET ?
-            `, [limit, offset]);
+            `, [...params, limit, offset]);
+
+            // Get total count
+            const countResult = await db.get(`
+                SELECT COUNT(*) as count 
+                FROM schemes 
+                WHERE ${whereClause}
+            `, params);
+            total = countResult?.count || 0;
         }
 
         // If user is authenticated, add eligibility information
@@ -55,6 +94,7 @@ router.get('/search', optionalAuth, validateQuery('schemeSearch'), async (req, r
                 pagination: {
                     limit,
                     offset,
+                    total,
                     hasMore: schemes.length === limit
                 }
             }

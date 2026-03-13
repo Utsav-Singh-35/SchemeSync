@@ -89,6 +89,10 @@ const schemas = {
     schemeSearch: Joi.object({
         query: Joi.string().min(1).max(200).optional(),
         category: Joi.string().max(50).optional(),
+        ministry: Joi.string().max(100).optional(),
+        level: Joi.string().valid('central', 'state', 'district', 'local').optional(),
+        beneficiary: Joi.string().max(50).optional(),
+        state: Joi.string().max(50).optional(),
         limit: Joi.number().integer().min(1).max(100).default(20),
         offset: Joi.number().integer().min(0).default(0)
     }),

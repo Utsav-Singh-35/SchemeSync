@@ -13,21 +13,21 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <div className="text-2xl font-bold text-blue-600">SchemeSync</div>
+            <div className="text-2xl font-bold text-black">SchemeSync</div>
           </Link>
 
           {/* Navigation */}
           <nav className="hidden md:flex space-x-8">
-            <Link href="/search" className="flex items-center text-gray-700 hover:text-blue-600">
+            <Link href="/search" className="flex items-center text-gray-600 hover:text-yellow-500">
               <MagnifyingGlassIcon className="h-5 w-5 mr-1" />
               Search Schemes
             </Link>
             {user && (
               <>
-                <Link href="/dashboard" className="text-gray-700 hover:text-blue-600">
+                <Link href="/dashboard" className="text-gray-600 hover:text-yellow-500">
                   Dashboard
                 </Link>
-                <Link href="/saved" className="flex items-center text-gray-700 hover:text-blue-600">
+                <Link href="/saved" className="flex items-center text-gray-600 hover:text-yellow-500">
                   <BookmarkIcon className="h-5 w-5 mr-1" />
                   Saved
                 </Link>
@@ -39,11 +39,11 @@ export default function Header() {
           <div className="flex items-center space-x-4">
             {user ? (
               <div className="relative group">
-                <button className="flex items-center text-gray-700 hover:text-blue-600">
+                <button className="flex items-center text-gray-600 hover:text-yellow-500">
                   <UserIcon className="h-5 w-5 mr-1" />
                   {user.name}
                 </button>
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all border border-gray-200">
                   <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                     Profile
                   </Link>
@@ -57,12 +57,12 @@ export default function Header() {
               </div>
             ) : (
               <div className="flex space-x-4">
-                <Link href="/auth/login" className="text-gray-700 hover:text-blue-600">
+                <Link href="/auth/login" className="text-gray-600 hover:text-yellow-500">
                   Login
                 </Link>
                 <Link
                   href="/auth/register"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+                  className="bg-yellow-500 text-black px-4 py-2 rounded-md hover:bg-yellow-400 font-medium"
                 >
                   Register
                 </Link>

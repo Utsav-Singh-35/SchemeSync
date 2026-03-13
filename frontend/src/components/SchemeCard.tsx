@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Scheme, automationAPI } from '@/lib/api';
 import { BookmarkIcon as BookmarkOutline } from '@heroicons/react/24/outline';
@@ -23,12 +24,22 @@ export default function SchemeCard({
   showEligibility = true,
   showApplyButton = true
 }: SchemeCardProps) {
-  const handleBookmark = (e: React.MouseEvent) => {
+  const [isBookmarked, setIsBookmarked] = useState(isSaved);
+
+  // Sync with prop changes
+  useEffect(() => {
+    setIsBookmarked(isSaved);
+  }, [isSaved]);
+
+  const handleBookmark = async (e: React.MouseEvent) => {
     e.preventDefault();
-    if (isSaved && onRemove) {
-      onRemove(scheme.id);
-    } else if (!isSaved && onSave) {
-      onSave(scheme.id);
+    
+    if (isBookmarked && onRemove) {
+      await onRemove(scheme.id);
+      setIsBookmarked(false);
+    } else if (!isBookmarked && onSave) {
+      await onSave(scheme.id);
+      setIsBookmarked(true);
     }
   };
 
@@ -90,19 +101,19 @@ export default function SchemeCard({
     
     switch (status) {
       case 'eligible':
-        bgColor = 'bg-green-100 text-green-800';
+        bgColor = 'bg-yellow-100 text-yellow-900 border border-yellow-300';
         text = `${Math.round(score)}% Match`;
         break;
       case 'likely_eligible':
-        bgColor = 'bg-yellow-100 text-yellow-800';
+        bgColor = 'bg-gray-200 text-gray-800 border border-gray-300';
         text = `${Math.round(score)}% Likely`;
         break;
       case 'not_eligible':
-        bgColor = 'bg-red-100 text-red-800';
+        bgColor = 'bg-gray-300 text-gray-900 border border-gray-400';
         text = 'Not Eligible';
         break;
       case 'insufficient_data':
-        bgColor = 'bg-blue-100 text-blue-800';
+        bgColor = 'bg-gray-100 text-gray-700 border border-gray-300';
         text = 'Need More Info';
         break;
     }
@@ -115,30 +126,30 @@ export default function SchemeCard({
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
-      <div className="flex justify-between items-start mb-3">
-        <div className="flex-1">
+    <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow flex flex-col h-full">
+      <div className="flex justify-between items-start mb-3 gap-3">
+        <div className="flex-1 min-w-0">
           <Link href={`/schemes/${scheme.slug}`}>
-            <h3 className="text-lg font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">
+            <h3 className="text-base font-semibold text-gray-900 hover:text-yellow-600 cursor-pointer line-clamp-2 leading-snug">
               {scheme.title}
             </h3>
           </Link>
-          <div className="flex items-center space-x-2 mt-1">
-            <span className="text-sm text-gray-500">{scheme.ministry}</span>
+          <div className="flex items-center space-x-2 mt-2">
+            <span className="text-xs text-gray-500 truncate">{scheme.ministry}</span>
             <span className="text-gray-300">•</span>
-            <span className="text-sm text-gray-500 capitalize">{scheme.level}</span>
+            <span className="text-xs text-gray-500 capitalize flex-shrink-0">{scheme.level}</span>
           </div>
         </div>
         
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 flex-shrink-0">
           {getEligibilityBadge()}
           {(onSave || onRemove) && (
             <button
               onClick={handleBookmark}
-              className="text-gray-400 hover:text-blue-600 transition-colors"
+              className="text-gray-400 hover:text-yellow-500 transition-colors"
             >
-              {isSaved ? (
-                <BookmarkSolid className="h-5 w-5" />
+              {isBookmarked ? (
+                <BookmarkSolid className="h-5 w-5 text-yellow-500" />
               ) : (
                 <BookmarkOutline className="h-5 w-5" />
               )}
@@ -147,33 +158,33 @@ export default function SchemeCard({
         </div>
       </div>
 
-      <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+      <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">
         {scheme.description}
       </p>
 
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="flex flex-wrap gap-2 mb-4 min-h-[28px]">
         {scheme.tags.slice(0, 3).map((tag: any, index: number) => (
           <span
             key={index}
-            className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-50 text-blue-700"
+            className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-700 border border-gray-300"
           >
             {typeof tag === 'string' ? tag : tag.label || tag.value || 'Unknown'}
           </span>
         ))}
         {scheme.tags.length > 3 && (
-          <span className="text-xs text-gray-500">+{scheme.tags.length - 3} more</span>
+          <span className="text-xs text-gray-500 self-center">+{scheme.tags.length - 3} more</span>
         )}
       </div>
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center pt-3 border-t border-gray-100 mt-auto">
         <div className="text-xs text-gray-500">
-          Updated: {new Date(scheme.last_updated).toLocaleDateString()}
+          {new Date(scheme.last_updated).toLocaleDateString()}
         </div>
         <div className="flex items-center space-x-2">
           {showApplyButton && (
             <button
               onClick={handleAutoFill}
-              className="flex items-center px-3 py-1 bg-green-600 text-white text-xs font-medium rounded-md hover:bg-green-700 transition-colors"
+              className="flex items-center px-3 py-1.5 bg-yellow-500 text-black text-xs font-medium rounded-md hover:bg-yellow-400 transition-colors"
             >
               <CpuChipIcon className="h-3 w-3 mr-1" />
               Auto-Fill
@@ -181,7 +192,7 @@ export default function SchemeCard({
           )}
           <Link
             href={`/schemes/${scheme.slug}`}
-            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            className="text-gray-900 hover:text-yellow-600 text-xs font-medium whitespace-nowrap"
           >
             View Details →
           </Link>

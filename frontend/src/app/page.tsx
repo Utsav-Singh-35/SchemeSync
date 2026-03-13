@@ -53,57 +53,57 @@ export default function Home() {
       <Header />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <section className="bg-black text-white min-h-[85vh] flex items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Government Schemes Made Simple
+            {/* Small label */}
+            <div className="mb-6">
+              <span className="text-yellow-500 text-sm md:text-base font-medium tracking-wider uppercase">
+                Discover Your Benefits
+              </span>
+            </div>
+            
+            {/* Large Hero Text */}
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold mb-8 leading-none">
+              <span className="text-white">Government</span>
+              <br />
+              <span className="text-white">Schemes</span>
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100">
-              Discover benefits, subsidies, and welfare programs you're eligible for
+            
+            {/* Subtitle */}
+            <p className="text-lg md:text-xl mb-12 text-gray-400 max-w-3xl mx-auto">
+              Know your schemes. Know your benefits.
             </p>
             
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-8">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search for schemes, benefits, or keywords..."
-                  className="w-full px-6 py-4 text-gray-900 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-2 top-2 bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700"
-                >
-                  <MagnifyingGlassIcon className="h-6 w-6" />
-                </button>
-              </div>
-            </form>
+            <p className="text-sm md:text-base mb-12 text-gray-500 max-w-2xl mx-auto">
+              Navigate through thousands of government schemes and find the benefits you're eligible for
+            </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {/* CTA Button */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
               {user ? (
                 <Link
                   href="/dashboard"
-                  className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                  className="bg-white text-black px-10 py-4 rounded-md font-semibold hover:bg-gray-100 transition-colors inline-flex items-center text-lg group"
                 >
                   View My Dashboard
+                  <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
                 </Link>
               ) : (
                 <Link
                   href="/auth/register"
-                  className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+                  className="bg-white text-black px-10 py-4 rounded-md font-semibold hover:bg-gray-100 transition-colors inline-flex items-center text-lg group"
                 >
-                  Get Started Free
+                  Explore Your Schemes
+                  <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
                 </Link>
               )}
-              <Link
-                href="/search"
-                className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
-              >
-                Browse All Schemes
+            </div>
+            
+            {/* Secondary link */}
+            <div className="text-sm text-gray-500">
+              <Link href="/search" className="border-b border-gray-700 hover:border-gray-400 transition-colors pb-1">
+                BROWSE ALL SCHEMES
               </Link>
             </div>
           </div>
@@ -117,28 +117,28 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div className="text-center">
                 <div className="flex justify-center mb-4">
-                  <DocumentTextIcon className="h-12 w-12 text-blue-600" />
+                  <DocumentTextIcon className="h-12 w-12 text-gray-900" />
                 </div>
                 <div className="text-3xl font-bold text-gray-900">{stats.totalSchemes?.toLocaleString()}</div>
                 <div className="text-gray-600">Active Schemes</div>
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-4">
-                  <ChartBarIcon className="h-12 w-12 text-green-600" />
+                  <ChartBarIcon className="h-12 w-12 text-gray-700" />
                 </div>
                 <div className="text-3xl font-bold text-gray-900">{stats.byMinistry?.length || 0}</div>
                 <div className="text-gray-600">Ministries</div>
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-4">
-                  <UserGroupIcon className="h-12 w-12 text-purple-600" />
+                  <UserGroupIcon className="h-12 w-12 text-gray-700" />
                 </div>
                 <div className="text-3xl font-bold text-gray-900">{stats.byLevel?.length || 0}</div>
                 <div className="text-gray-600">Government Levels</div>
               </div>
               <div className="text-center">
                 <div className="flex justify-center mb-4">
-                  <MagnifyingGlassIcon className="h-12 w-12 text-orange-600" />
+                  <MagnifyingGlassIcon className="h-12 w-12 text-yellow-500" />
                 </div>
                 <div className="text-3xl font-bold text-gray-900">{stats.recentlyUpdated || 0}</div>
                 <div className="text-gray-600">Recently Updated</div>
@@ -186,7 +186,7 @@ export default function Home() {
           <div className="text-center mt-12">
             <Link
               href="/search"
-              className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+              className="bg-yellow-500 text-black px-8 py-3 rounded-lg font-semibold hover:bg-yellow-400 transition-colors"
             >
               View All Schemes
             </Link>
@@ -204,22 +204,22 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">1</span>
+              <div className="bg-yellow-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 border-2 border-yellow-500">
+                <span className="text-2xl font-bold text-black">1</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Create Profile</h3>
               <p className="text-gray-600">Tell us about yourself, your family, and your situation</p>
             </div>
             <div className="text-center">
-              <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-green-600">2</span>
+              <div className="bg-gray-200 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 border-2 border-gray-400">
+                <span className="text-2xl font-bold text-black">2</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Get Matched</h3>
               <p className="text-gray-600">Our AI finds schemes you're eligible for based on your profile</p>
             </div>
             <div className="text-center">
-              <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-purple-600">3</span>
+              <div className="bg-gray-900 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 border-2 border-black">
+                <span className="text-2xl font-bold text-white">3</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Apply & Track</h3>
               <p className="text-gray-600">Get step-by-step guidance and track your applications</p>

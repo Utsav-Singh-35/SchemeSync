@@ -19,6 +19,7 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const [eligibleSchemes, setEligibleSchemes] = useState<Scheme[]>([]);
   const [savedSchemes, setSavedSchemes] = useState<Scheme[]>([]);
+  const [savedSchemeIds, setSavedSchemeIds] = useState<Set<number>>(new Set());
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<any>(null);
 
@@ -45,6 +46,8 @@ export default function DashboardPage() {
 
       if (savedResponse.success) {
         setSavedSchemes(savedResponse.data.schemes);
+        const savedIds = new Set(savedResponse.data.schemes.map((s: Scheme) => s.id));
+        setSavedSchemeIds(savedIds);
       }
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
@@ -57,6 +60,7 @@ export default function DashboardPage() {
   const handleSaveScheme = async (schemeId: number) => {
     try {
       await schemesAPI.saveScheme(schemeId);
+      setSavedSchemeIds(prev => new Set(prev).add(schemeId));
       toast.success('Scheme saved successfully');
       loadDashboardData(); // Refresh data
     } catch (error) {
@@ -67,6 +71,11 @@ export default function DashboardPage() {
   const handleRemoveSaved = async (schemeId: number) => {
     try {
       await schemesAPI.removeSaved(schemeId);
+      setSavedSchemeIds(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(schemeId);
+        return newSet;
+      });
       toast.success('Scheme removed from saved list');
       loadDashboardData(); // Refresh data
     } catch (error) {
@@ -88,7 +97,7 @@ export default function DashboardPage() {
             <div className="mt-6">
               <Link
                 href="/auth/login"
-                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-400"
               >
                 Sign In
               </Link>
@@ -117,10 +126,10 @@ export default function DashboardPage() {
         {/* Stats Cards */}
         {stats && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <ChartBarIcon className="h-8 w-8 text-green-600" />
+                  <ChartBarIcon className="h-8 w-8 text-yellow-500" />
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Eligible Schemes</p>
@@ -129,10 +138,10 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <DocumentTextIcon className="h-8 w-8 text-blue-600" />
+                  <DocumentTextIcon className="h-8 w-8 text-gray-700" />
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Total Evaluated</p>
@@ -141,10 +150,10 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
+            <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <BookmarkIcon className="h-8 w-8 text-purple-600" />
+                  <BookmarkIcon className="h-8 w-8 text-gray-900" />
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-500">Saved Schemes</p>
@@ -161,7 +170,7 @@ export default function DashboardPage() {
             <h2 className="text-2xl font-bold text-gray-900">Your Eligible Schemes</h2>
             <Link
               href="/eligible"
-              className="text-blue-600 hover:text-blue-800 font-medium"
+              className="text-gray-900 hover:text-yellow-600 font-medium"
             >
               View All →
             </Link>
@@ -189,6 +198,8 @@ export default function DashboardPage() {
                   key={scheme.id}
                   scheme={scheme}
                   onSave={handleSaveScheme}
+                  onRemove={handleRemoveSaved}
+                  isSaved={savedSchemeIds.has(scheme.id)}
                   showEligibility={true}
                 />
               ))}
@@ -203,7 +214,7 @@ export default function DashboardPage() {
               <div className="mt-6">
                 <Link
                   href="/profile"
-                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-400"
                 >
                   Complete Profile
                 </Link>
@@ -218,7 +229,7 @@ export default function DashboardPage() {
             <h2 className="text-2xl font-bold text-gray-900">Saved Schemes</h2>
             <Link
               href="/saved"
-              className="text-blue-600 hover:text-blue-800 font-medium"
+              className="text-gray-900 hover:text-yellow-600 font-medium"
             >
               View All →
             </Link>
@@ -246,7 +257,7 @@ export default function DashboardPage() {
               <div className="mt-6">
                 <Link
                   href="/search"
-                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                  className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-yellow-500 hover:bg-yellow-400"
                 >
                   Browse Schemes
                 </Link>
@@ -261,9 +272,9 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Link
               href="/search"
-              className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
+              className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-yellow-500 transition-colors"
             >
-              <DocumentTextIcon className="h-8 w-8 text-blue-600 mr-3" />
+              <DocumentTextIcon className="h-8 w-8 text-gray-900 mr-3" />
               <div>
                 <p className="font-medium text-gray-900">Search Schemes</p>
                 <p className="text-sm text-gray-500">Find new government programs</p>
@@ -272,9 +283,9 @@ export default function DashboardPage() {
             
             <Link
               href="/profile"
-              className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
+              className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-yellow-500 transition-colors"
             >
-              <UserIcon className="h-8 w-8 text-green-600 mr-3" />
+              <UserIcon className="h-8 w-8 text-gray-700 mr-3" />
               <div>
                 <p className="font-medium text-gray-900">Update Profile</p>
                 <p className="text-sm text-gray-500">Improve scheme matching</p>
@@ -283,9 +294,9 @@ export default function DashboardPage() {
             
             <Link
               href="/applications"
-              className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
+              className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-yellow-500 transition-colors"
             >
-              <ChartBarIcon className="h-8 w-8 text-purple-600 mr-3" />
+              <ChartBarIcon className="h-8 w-8 text-yellow-500 mr-3" />
               <div>
                 <p className="font-medium text-gray-900">Track Applications</p>
                 <p className="text-sm text-gray-500">Monitor your progress</p>

@@ -190,18 +190,18 @@ export default function SchemeDetailPage() {
     switch (status) {
       case 'eligible':
         return (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4">
             <div className="flex items-center">
-              <CheckCircleIcon className="h-6 w-6 text-green-600 mr-2" />
+              <CheckCircleIcon className="h-6 w-6 text-yellow-600 mr-2" />
               <div>
-                <h3 className="text-lg font-semibold text-green-800">You're Eligible!</h3>
-                <p className="text-green-700">Match Score: {Math.round(score)}%</p>
+                <h3 className="text-lg font-semibold text-gray-900">You're Eligible!</h3>
+                <p className="text-gray-700">Match Score: {Math.round(score)}%</p>
               </div>
             </div>
             {reasons && reasons.length > 0 && (
               <div className="mt-3">
-                <p className="text-sm font-medium text-green-800 mb-1">Why you qualify:</p>
-                <ul className="text-sm text-green-700 list-disc list-inside">
+                <p className="text-sm font-medium text-gray-900 mb-1">Why you qualify:</p>
+                <ul className="text-sm text-gray-700 list-disc list-inside">
                   {reasons.map((reason: string, index: number) => (
                     <li key={index}>{reason}</li>
                   ))}
@@ -213,18 +213,18 @@ export default function SchemeDetailPage() {
       
       case 'likely_eligible':
         return (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div className="bg-gray-100 border border-gray-300 rounded-lg p-4">
             <div className="flex items-center">
-              <ExclamationTriangleIcon className="h-6 w-6 text-yellow-600 mr-2" />
+              <ExclamationTriangleIcon className="h-6 w-6 text-gray-700 mr-2" />
               <div>
-                <h3 className="text-lg font-semibold text-yellow-800">Likely Eligible</h3>
-                <p className="text-yellow-700">Match Score: {Math.round(score)}%</p>
+                <h3 className="text-lg font-semibold text-gray-900">Likely Eligible</h3>
+                <p className="text-gray-700">Match Score: {Math.round(score)}%</p>
               </div>
             </div>
             {missing_criteria && missing_criteria.length > 0 && (
               <div className="mt-3">
-                <p className="text-sm font-medium text-yellow-800 mb-1">Complete your profile for better matching:</p>
-                <ul className="text-sm text-yellow-700 list-disc list-inside">
+                <p className="text-sm font-medium text-gray-900 mb-1">Complete your profile for better matching:</p>
+                <ul className="text-sm text-gray-700 list-disc list-inside">
                   {missing_criteria.map((criteria: string, index: number) => (
                     <li key={index}>{criteria}</li>
                   ))}
@@ -236,18 +236,18 @@ export default function SchemeDetailPage() {
       
       case 'not_eligible':
         return (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="bg-gray-200 border border-gray-400 rounded-lg p-4">
             <div className="flex items-center">
-              <XCircleIcon className="h-6 w-6 text-red-600 mr-2" />
+              <XCircleIcon className="h-6 w-6 text-gray-900 mr-2" />
               <div>
-                <h3 className="text-lg font-semibold text-red-800">Not Eligible</h3>
-                <p className="text-red-700">Based on current profile information</p>
+                <h3 className="text-lg font-semibold text-gray-900">Not Eligible</h3>
+                <p className="text-gray-700">Based on current profile information</p>
               </div>
             </div>
             {reasons && reasons.length > 0 && (
               <div className="mt-3">
-                <p className="text-sm font-medium text-red-800 mb-1">Reasons:</p>
-                <ul className="text-sm text-red-700 list-disc list-inside">
+                <p className="text-sm font-medium text-gray-900 mb-1">Reasons:</p>
+                <ul className="text-sm text-gray-700 list-disc list-inside">
                   {reasons.map((reason: string, index: number) => (
                     <li key={index}>{reason}</li>
                   ))}
@@ -259,12 +259,12 @@ export default function SchemeDetailPage() {
       
       default:
         return (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-gray-100 border border-gray-300 rounded-lg p-4">
             <div className="flex items-center">
-              <DocumentTextIcon className="h-6 w-6 text-blue-600 mr-2" />
+              <DocumentTextIcon className="h-6 w-6 text-gray-700 mr-2" />
               <div>
-                <h3 className="text-lg font-semibold text-blue-800">Need More Information</h3>
-                <p className="text-blue-700">Complete your profile to check eligibility</p>
+                <h3 className="text-lg font-semibold text-gray-900">Need More Information</h3>
+                <p className="text-gray-700">Complete your profile to check eligibility</p>
               </div>
             </div>
           </div>
@@ -296,11 +296,11 @@ export default function SchemeDetailPage() {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Scheme Not Found</h1>
             <p className="text-gray-600 mb-8">The scheme you're looking for doesn't exist or has been removed.</p>
-            <Link href="/search" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+            <Link href="/search" className="bg-yellow-500 text-black px-6 py-3 rounded-md hover:bg-yellow-400 font-medium inline-block">
               Browse All Schemes
             </Link>
           </div>
@@ -313,15 +313,15 @@ export default function SchemeDetailPage() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
-        <Link href="/search" className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6">
+        <Link href="/search" className="inline-flex items-center text-gray-900 hover:text-yellow-600 mb-6 font-medium">
           <ArrowLeftIcon className="h-5 w-5 mr-1" />
           Back to Search
         </Link>
 
         {/* Scheme Header */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
           <div className="flex justify-between items-start mb-4">
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">{scheme.title}</h1>
@@ -338,7 +338,7 @@ export default function SchemeDetailPage() {
               <div className="flex items-center space-x-3">
                 <button
                   onClick={handleAutoFill}
-                  className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  className="flex items-center space-x-2 px-4 py-2 bg-yellow-500 text-black rounded-md hover:bg-yellow-400 transition-colors font-medium"
                 >
                   <CpuChipIcon className="h-5 w-5" />
                   <span>Auto-Fill Form</span>
@@ -346,14 +346,14 @@ export default function SchemeDetailPage() {
                 <button
                   onClick={handleSaveToggle}
                   disabled={savingScheme}
-                  className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
+                  className="flex items-center space-x-2 text-gray-600 hover:text-yellow-500 transition-colors"
                 >
                   {isSaved ? (
-                    <BookmarkSolid className="h-6 w-6" />
+                    <BookmarkSolid className="h-6 w-6 text-yellow-500" />
                   ) : (
                     <BookmarkOutline className="h-6 w-6" />
                   )}
-                  <span>{isSaved ? 'Saved' : 'Save'}</span>
+                  <span className="font-medium">{isSaved ? 'Saved' : 'Save'}</span>
                 </button>
               </div>
             )}
@@ -364,7 +364,7 @@ export default function SchemeDetailPage() {
             {scheme.scheme_category.map((category: any, index: number) => (
               <span
                 key={index}
-                className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
+                className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-gray-100 text-gray-800 border border-gray-300"
               >
                 {typeof category === 'string' ? category : category.label || category.value || 'Unknown'}
               </span>
@@ -380,14 +380,14 @@ export default function SchemeDetailPage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Description */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-lg border border-gray-200 p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Description</h2>
               <p className="text-gray-700 leading-relaxed">{scheme.description}</p>
             </div>
 
             {/* Benefits */}
             {scheme.benefits && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h2>
                 <div className="prose prose-sm max-w-none text-gray-700">
                   {scheme.benefits.split('\n').map((benefit: string, index: number) => (
@@ -398,41 +398,27 @@ export default function SchemeDetailPage() {
                 </div>
               </div>
             )}
-
-            {/* Eligibility Criteria */}
-            {scheme.eligibility_criteria && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Eligibility Criteria</h2>
-                <div className="prose prose-sm max-w-none text-gray-700">
-                  {scheme.eligibility_criteria.split('\n').map((criteria: string, index: number) => (
-                    criteria.trim() && (
-                      <p key={index} className="mb-2">{criteria.trim()}</p>
-                    )
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Application Process */}
-            {scheme.application_process && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">How to Apply</h2>
-                <div className="prose prose-sm max-w-none text-gray-700">
-                  {scheme.application_process.split('\n').map((step: string, index: number) => (
-                    step.trim() && (
-                      <p key={index} className="mb-2">{step.trim()}</p>
-                    )
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Eligibility Criteria */}
+            {scheme.eligibility_criteria && (
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Eligibility Criteria</h3>
+                <div className="prose prose-sm max-w-none text-gray-700">
+                  {scheme.eligibility_criteria.split('\n').map((criteria: string, index: number) => (
+                    criteria.trim() && (
+                      <p key={index} className="mb-2 text-sm">{criteria.trim()}</p>
+                    )
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Required Documents */}
             {scheme.required_documents_array && scheme.required_documents_array.length > 0 && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Required Documents</h3>
                 <ul className="space-y-2">
                   {scheme.required_documents_array.map((doc: string, index: number) => (
@@ -447,7 +433,7 @@ export default function SchemeDetailPage() {
 
             {/* Contact Information */}
             {scheme.contact_information && Object.keys(scheme.contact_information).length > 0 && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
                 <div className="space-y-2 text-sm">
                   {Object.entries(scheme.contact_information).map(([key, value]: [string, any]) => (
@@ -462,7 +448,7 @@ export default function SchemeDetailPage() {
 
             {/* Reference Links */}
             {scheme.reference_links_array && scheme.reference_links_array.length > 0 && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Useful Links</h3>
                 <div className="space-y-2">
                   {scheme.reference_links_array.map((link: any, index: number) => (
@@ -471,7 +457,7 @@ export default function SchemeDetailPage() {
                       href={link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center text-blue-600 hover:text-blue-800 text-sm"
+                      className="flex items-center text-gray-900 hover:text-yellow-600 text-sm"
                     >
                       <ArrowTopRightOnSquareIcon className="h-4 w-4 mr-1" />
                       {link.title}
@@ -483,13 +469,13 @@ export default function SchemeDetailPage() {
 
             {/* Target Beneficiaries */}
             {scheme.target_beneficiaries && scheme.target_beneficiaries.length > 0 && (
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Target Beneficiaries</h3>
                 <div className="flex flex-wrap gap-2">
                   {scheme.target_beneficiaries.map((beneficiary: any, index: number) => (
                     <span
                       key={index}
-                      className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800"
+                      className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800 border border-gray-300"
                     >
                       {typeof beneficiary === 'string' ? beneficiary : beneficiary.label || beneficiary.value || 'Unknown'}
                     </span>
@@ -499,6 +485,20 @@ export default function SchemeDetailPage() {
             )}
           </div>
         </div>
+
+        {/* Application Process - Full Width */}
+        {scheme.application_process && (
+          <div className="bg-white rounded-lg border border-gray-200 p-6 mt-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">How to Apply</h2>
+            <div className="prose prose-sm max-w-none text-gray-700">
+              {scheme.application_process.split('\n').map((step: string, index: number) => (
+                step.trim() && (
+                  <p key={index} className="mb-2">{step.trim()}</p>
+                )
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

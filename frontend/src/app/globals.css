@@ -2,7 +2,11 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1a1a1a;
+  --snow: #fffafa;
+  --grey: #6b7280;
+  --charcoal: #2d2d2d;
+  --yellow: #fbbf24;
 }
 
 @theme inline {
@@ -12,15 +16,8 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
+  background: var(--snow);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
