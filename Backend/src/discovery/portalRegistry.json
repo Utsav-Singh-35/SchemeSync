@@ -1,0 +1,685 @@
+{
+  "central_portals": [
+    {
+      "name": "India.gov.in Schemes",
+      "portal_url": "https://www.india.gov.in/my-government/schemes",
+      "type": "portal",
+      "crawl_frequency": "weekly",
+      "parser_type": "generic",
+      "selectors": ["a[href*='scheme']", ".scheme-link a"]
+    },
+    {
+      "name": "MyGov.in",
+      "portal_url": "https://www.mygov.in/schemes/",
+      "type": "portal", 
+      "crawl_frequency": "weekly",
+      "parser_type": "mygov"
+    },
+    {
+      "name": "PM India Schemes",
+      "portal_url": "https://pmindia.gov.in/en/government_tr_rec/schemes/",
+      "type": "portal",
+      "crawl_frequency": "weekly",
+      "parser_type": "pmindia"
+    },
+    {
+      "name": "Digital India Portal",
+      "portal_url": "https://digitalindia.gov.in/schemes",
+      "type": "portal",
+      "crawl_frequency": "monthly",
+      "parser_type": "generic"
+    }
+  ],
+  "ministry_portals": [
+    {
+      "name": "Ministry of Agriculture",
+      "portal_url": "https://www.agricoop.nic.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Agriculture and Farmers Welfare"
+    },
+    {
+      "name": "Ministry of Health",
+      "portal_url": "https://www.mohfw.gov.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly", 
+      "parser_type": "ministry",
+      "ministry": "Ministry of Health and Family Welfare"
+    },
+    {
+      "name": "Ministry of Education",
+      "portal_url": "https://www.education.gov.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Education"
+    },
+    {
+      "name": "Ministry of Rural Development",
+      "portal_url": "https://rural.nic.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Rural Development"
+    },
+    {
+      "name": "Ministry of Women and Child Development",
+      "portal_url": "https://wcd.nic.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Women and Child Development"
+    },
+    {
+      "name": "Ministry of MSME",
+      "portal_url": "https://www.msme.gov.in/schemes-initiatives",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Micro, Small and Medium Enterprises"
+    },
+    {
+      "name": "Ministry of Social Justice",
+      "portal_url": "https://socialjustice.nic.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Social Justice and Empowerment"
+    },
+    {
+      "name": "Ministry of Labour",
+      "portal_url": "https://labour.gov.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Labour and Employment"
+    }
+  ],
+  "state_portals": [
+    {
+      "name": "Uttar Pradesh Schemes",
+      "portal_url": "https://up.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Uttar Pradesh"
+    },
+    {
+      "name": "Maharashtra Schemes", 
+      "portal_url": "https://www.maharashtra.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Maharashtra"
+    },
+    {
+      "name": "Karnataka Schemes",
+      "portal_url": "https://www.karnataka.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state", 
+      "state": "Karnataka"
+    },
+    {
+      "name": "Tamil Nadu Schemes",
+      "portal_url": "https://www.tn.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Tamil Nadu"
+    },
+    {
+      "name": "Gujarat Schemes",
+      "portal_url": "https://gujaratindia.gov.in/schemes",
+      "type": "state", 
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Gujarat"
+    },
+    {
+      "name": "West Bengal Schemes",
+      "portal_url": "https://wb.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "West Bengal"
+    },
+    {
+      "name": "Rajasthan Schemes",
+      "portal_url": "https://rajasthan.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly", 
+      "parser_type": "state",
+      "state": "Rajasthan"
+    },
+    {
+      "name": "Madhya Pradesh Schemes",
+      "portal_url": "https://mp.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Madhya Pradesh"
+    },
+    {
+      "name": "Andhra Pradesh Schemes",
+      "portal_url": "https://www.ap.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Andhra Pradesh"
+    },
+    {
+      "name": "Telangana Schemes",
+      "portal_url": "https://www.telangana.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Telangana"
+    }
+  ],
+  "specialized_portals": [
+    {
+      "name": "PM-JAY Portal",
+      "portal_url": "https://www.pmjay.gov.in/",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "pmjay",
+      "category": "health"
+    },
+    {
+      "name": "PM-KISAN Portal", 
+      "portal_url": "https://pmkisan.gov.in/",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "pmkisan",
+      "category": "agriculture"
+    },
+    {
+      "name": "MGNREGA Portal",
+      "portal_url": "https://www.nrega.nic.in/",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "mgnrega",
+      "category": "employment"
+    },
+    {
+      "name": "Pradhan Mantri Awas Yojana",
+      "portal_url": "https://pmaymis.gov.in/",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "pmay",
+      "category": "housing"
+    },
+    {
+      "name": "Jan Aushadhi Portal",
+      "portal_url": "https://janaushadhi.gov.in/",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "janaushadhi",
+      "category": "health"
+    },
+    {
+      "name": "Skill India Portal",
+      "portal_url": "https://www.skillindia.gov.in/schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "skillindia",
+      "category": "employment"
+    },
+    {
+      "name": "Startup India Portal",
+      "portal_url": "https://www.startupindia.gov.in/schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "startupindia",
+      "category": "financial"
+    },
+    {
+      "name": "Beti Bachao Beti Padhao",
+      "portal_url": "https://wcd.nic.in/bbbp-schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "bbbp",
+      "category": "women_child"
+    },
+    {
+      "name": "Swachh Bharat Mission",
+      "portal_url": "https://swachhbharatmission.gov.in/schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "swachh",
+      "category": "environment"
+    },
+    {
+      "name": "Digital India Portal",
+      "portal_url": "https://digitalindia.gov.in/schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "digital",
+      "category": "technology"
+    },
+    {
+      "name": "Make in India",
+      "portal_url": "https://www.makeinindia.com/schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "makeindia",
+      "category": "manufacturing"
+    },
+    {
+      "name": "Atal Innovation Mission",
+      "portal_url": "https://aim.gov.in/schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "aim",
+      "category": "innovation"
+    },
+    {
+      "name": "National Solar Mission",
+      "portal_url": "https://mnre.gov.in/solar-schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "solar",
+      "category": "energy"
+    },
+    {
+      "name": "Ayushman Bharat",
+      "portal_url": "https://www.abnhpm.gov.in/schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "ayushman",
+      "category": "health"
+    },
+    {
+      "name": "Stand Up India",
+      "portal_url": "https://www.standupmitra.in/schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "standup",
+      "category": "financial"
+    },
+    {
+      "name": "Mudra Yojana",
+      "portal_url": "https://www.mudra.org.in/schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "mudra",
+      "category": "financial"
+    },
+    {
+      "name": "Kisan Credit Card",
+      "portal_url": "https://pmkisan.gov.in/kcc.aspx",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "kcc",
+      "category": "agriculture"
+    },
+    {
+      "name": "National Rural Livelihood Mission",
+      "portal_url": "https://aajeevika.gov.in/schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "nrlm",
+      "category": "employment"
+    },
+    {
+      "name": "Pradhan Mantri Fasal Bima Yojana",
+      "portal_url": "https://pmfby.gov.in/schemes",
+      "type": "specialized",
+      "crawl_frequency": "monthly",
+      "parser_type": "pmfby",
+      "category": "agriculture"
+    }
+  ],
+  "additional_ministry_portals": [
+    {
+      "name": "Ministry of Finance",
+      "portal_url": "https://www.finmin.nic.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Finance"
+    },
+    {
+      "name": "Ministry of Commerce",
+      "portal_url": "https://commerce.gov.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Commerce and Industry"
+    },
+    {
+      "name": "Ministry of Environment",
+      "portal_url": "https://moef.gov.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Environment, Forest and Climate Change"
+    },
+    {
+      "name": "Ministry of Power",
+      "portal_url": "https://powermin.gov.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Power"
+    },
+    {
+      "name": "Ministry of Railways",
+      "portal_url": "https://indianrailways.gov.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Railways"
+    },
+    {
+      "name": "Ministry of Road Transport",
+      "portal_url": "https://morth.nic.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Road Transport and Highways"
+    },
+    {
+      "name": "Ministry of Textiles",
+      "portal_url": "https://texmin.nic.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Textiles"
+    },
+    {
+      "name": "Ministry of Tourism",
+      "portal_url": "https://tourism.gov.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Tourism"
+    },
+    {
+      "name": "Ministry of Tribal Affairs",
+      "portal_url": "https://tribal.nic.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Tribal Affairs"
+    },
+    {
+      "name": "Ministry of Youth Affairs",
+      "portal_url": "https://yas.nic.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Youth Affairs and Sports"
+    },
+    {
+      "name": "Ministry of Information Technology",
+      "portal_url": "https://meity.gov.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Electronics and Information Technology"
+    },
+    {
+      "name": "Ministry of Food Processing",
+      "portal_url": "https://mofpi.nic.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Food Processing Industries"
+    },
+    {
+      "name": "Ministry of Housing",
+      "portal_url": "https://mohua.gov.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Housing and Urban Affairs"
+    },
+    {
+      "name": "Ministry of Petroleum",
+      "portal_url": "https://petroleum.nic.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Petroleum and Natural Gas"
+    },
+    {
+      "name": "Ministry of Steel",
+      "portal_url": "https://steel.gov.in/schemes",
+      "type": "ministry",
+      "crawl_frequency": "weekly",
+      "parser_type": "ministry",
+      "ministry": "Ministry of Steel"
+    }
+  ],
+  "additional_state_portals": [
+    {
+      "name": "Bihar Schemes",
+      "portal_url": "https://state.bihar.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Bihar"
+    },
+    {
+      "name": "Odisha Schemes",
+      "portal_url": "https://odisha.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Odisha"
+    },
+    {
+      "name": "Punjab Schemes",
+      "portal_url": "https://punjab.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Punjab"
+    },
+    {
+      "name": "Haryana Schemes",
+      "portal_url": "https://haryana.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Haryana"
+    },
+    {
+      "name": "Jharkhand Schemes",
+      "portal_url": "https://jharkhand.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Jharkhand"
+    },
+    {
+      "name": "Chhattisgarh Schemes",
+      "portal_url": "https://cgstate.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Chhattisgarh"
+    },
+    {
+      "name": "Assam Schemes",
+      "portal_url": "https://assam.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Assam"
+    },
+    {
+      "name": "Kerala Schemes",
+      "portal_url": "https://kerala.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Kerala"
+    },
+    {
+      "name": "Himachal Pradesh Schemes",
+      "portal_url": "https://himachal.nic.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Himachal Pradesh"
+    },
+    {
+      "name": "Uttarakhand Schemes",
+      "portal_url": "https://uk.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Uttarakhand"
+    },
+    {
+      "name": "Goa Schemes",
+      "portal_url": "https://goa.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Goa"
+    },
+    {
+      "name": "Tripura Schemes",
+      "portal_url": "https://tripura.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Tripura"
+    },
+    {
+      "name": "Meghalaya Schemes",
+      "portal_url": "https://meghalaya.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Meghalaya"
+    },
+    {
+      "name": "Manipur Schemes",
+      "portal_url": "https://manipur.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Manipur"
+    },
+    {
+      "name": "Nagaland Schemes",
+      "portal_url": "https://nagaland.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Nagaland"
+    },
+    {
+      "name": "Arunachal Pradesh Schemes",
+      "portal_url": "https://arunachalpradesh.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Arunachal Pradesh"
+    },
+    {
+      "name": "Mizoram Schemes",
+      "portal_url": "https://mizoram.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Mizoram"
+    },
+    {
+      "name": "Sikkim Schemes",
+      "portal_url": "https://sikkim.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Sikkim"
+    }
+  ],
+  "union_territory_portals": [
+    {
+      "name": "Delhi Schemes",
+      "portal_url": "https://delhi.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Delhi"
+    },
+    {
+      "name": "Chandigarh Schemes",
+      "portal_url": "https://chandigarh.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Chandigarh"
+    },
+    {
+      "name": "Puducherry Schemes",
+      "portal_url": "https://py.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Puducherry"
+    },
+    {
+      "name": "Jammu and Kashmir Schemes",
+      "portal_url": "https://jk.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Jammu and Kashmir"
+    },
+    {
+      "name": "Ladakh Schemes",
+      "portal_url": "https://ladakh.nic.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Ladakh"
+    },
+    {
+      "name": "Andaman and Nicobar Schemes",
+      "portal_url": "https://andaman.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Andaman and Nicobar Islands"
+    },
+    {
+      "name": "Lakshadweep Schemes",
+      "portal_url": "https://lakshadweep.gov.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Lakshadweep"
+    },
+    {
+      "name": "Dadra and Nagar Haveli Schemes",
+      "portal_url": "https://dnh.nic.in/schemes",
+      "type": "state",
+      "crawl_frequency": "monthly",
+      "parser_type": "state",
+      "state": "Dadra and Nagar Haveli and Daman and Diu"
+    }
+  ],
+  "dataset_sources": [
+    {
+      "name": "Open Government Data Platform",
+      "portal_url": "https://data.gov.in",
+      "type": "dataset",
+      "crawl_frequency": "weekly",
+      "parser_type": "dataset"
+    },
+    {
+      "name": "India Budget Portal",
+      "portal_url": "https://www.indiabudget.gov.in/schemes",
+      "type": "dataset",
+      "crawl_frequency": "monthly",
+      "parser_type": "budget"
+    }
+  ]
+}
