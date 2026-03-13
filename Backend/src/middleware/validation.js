@@ -67,14 +67,27 @@ const schemas = {
 
     profileUpdate: Joi.object({
         name: Joi.string().min(2).max(100).optional(),
-        dateOfBirth: Joi.date().max('now').optional(),
-        gender: Joi.string().valid('male', 'female', 'other').optional(),
+        age: Joi.number().integer().min(0).max(120).optional(),
+        date_of_birth: Joi.date().max('now').optional(),
+        gender: Joi.string().valid('male', 'female', 'transgender', 'other').optional(),
         occupation: Joi.string().max(100).optional(),
-        annualIncome: Joi.number().integer().min(0).optional(),
+        annual_income: Joi.number().integer().min(0).optional(),
+        employment_status: Joi.string().max(100).optional(),
         address: Joi.string().max(500).optional(),
         district: Joi.string().max(100).optional(),
         state: Joi.string().max(100).optional(),
-        phoneNumber: Joi.string().pattern(/^[0-9+\-\s()]+$/).optional()
+        pin_code: Joi.string().max(10).optional(),
+        category: Joi.string().valid('general', 'obc', 'sc', 'st', 'ews').optional(),
+        religion: Joi.string().max(50).optional(),
+        is_student: Joi.boolean().optional(),
+        is_farmer: Joi.boolean().optional(),
+        is_disabled: Joi.boolean().optional(),
+        disability_percentage: Joi.number().integer().min(0).max(100).optional(),
+        is_widow: Joi.boolean().optional(),
+        is_senior_citizen: Joi.boolean().optional(),
+        family_size: Joi.number().integer().min(1).max(50).optional(),
+        marital_status: Joi.string().valid('single', 'married', 'divorced', 'widowed').optional(),
+        phone_number: Joi.string().pattern(/^[0-9+\-\s()]+$/).optional()
     }),
 
     familyMember: Joi.object({

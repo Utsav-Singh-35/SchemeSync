@@ -31,23 +31,45 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<ProfileData>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
   useEffect(() => {
     if (user) {
-      loadProfile();
+      loadProfile(true);
     }
   }, [user]);
 
-  const loadProfile = async () => {
+  const loadProfile = async (isInitial = false) => {
+    if (isInitial) setLoading(true);
     try {
       const response = await authAPI.getProfile();
+      console.log('📥 Profile loaded:', response.data);
       if (response.success) {
-        setProfile(response.data.profile || {});
+        const userData = response.data.user || {};
+        const profileData: ProfileData = {
+          age: userData.age != null ? Number(userData.age) : undefined,
+          gender: userData.gender || undefined,
+          annual_income: userData.annual_income != null ? Number(userData.annual_income) : undefined,
+          occupation: userData.occupation || undefined,
+          state: userData.state || undefined,
+          district: userData.district || undefined,
+          category: userData.category || undefined,
+          is_student: Boolean(userData.is_student),
+          is_farmer: Boolean(userData.is_farmer),
+          is_disabled: Boolean(userData.is_disabled),
+          disability_percentage: userData.disability_percentage != null ? Number(userData.disability_percentage) : undefined,
+          is_senior_citizen: Boolean(userData.is_senior_citizen),
+          family_size: userData.family_size != null ? Number(userData.family_size) : undefined,
+          marital_status: userData.marital_status || undefined,
+          phone_number: userData.phone_number || undefined
+        };
+        console.log('✅ Setting profile state:', profileData);
+        setProfile(profileData);
       }
     } catch (error) {
       console.error('Failed to load profile:', error);
     } finally {
-      setLoading(false);
+      if (isInitial) setLoading(false);
     }
   };
 
@@ -56,11 +78,16 @@ export default function ProfilePage() {
     setSaving(true);
     
     try {
+      console.log('💾 Saving profile:', profile);
       const response = await authAPI.updateProfile(profile);
+      console.log('✅ Save response:', response);
       if (response.success) {
         toast.success('Profile updated successfully!');
+        setLastSaved(new Date());
+        await loadProfile(false);
       }
     } catch (error: any) {
+      console.error('❌ Save error:', error);
       const message = error.response?.data?.message || 'Failed to update profile';
       toast.error(message);
     } finally {
@@ -69,7 +96,11 @@ export default function ProfilePage() {
   };
 
   const handleInputChange = (field: keyof ProfileData, value: any) => {
-    setProfile(prev => ({ ...prev, [field]: value }));
+    setProfile(prev => {
+      // Handle empty strings and convert to undefined for cleaner data
+      const cleanValue = value === '' ? undefined : value;
+      return { ...prev, [field]: cleanValue };
+    });
   };
 
   if (!user) {
@@ -137,8 +168,11 @@ export default function ProfilePage() {
                 </label>
                 <input
                   type="number"
-                  value={profile.age || ''}
-                  onChange={(e) => handleInputChange('age', parseInt(e.target.value) || undefined)}
+                  value={profile.age ?? ''}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    handleInputChange('age', val ? parseInt(val, 10) : undefined);
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   placeholder="Enter your age"
                 />
@@ -167,8 +201,11 @@ export default function ProfilePage() {
                 </label>
                 <input
                   type="number"
-                  value={profile.annual_income || ''}
-                  onChange={(e) => handleInputChange('annual_income', parseInt(e.target.value) || undefined)}
+                  value={profile.annual_income ?? ''}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    handleInputChange('annual_income', val ? parseInt(val, 10) : undefined);
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   placeholder="Enter annual income"
                 />
@@ -283,8 +320,11 @@ export default function ProfilePage() {
                 </label>
                 <input
                   type="number"
-                  value={profile.family_size || ''}
-                  onChange={(e) => handleInputChange('family_size', parseInt(e.target.value) || undefined)}
+                  value={profile.family_size ?? ''}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    handleInputChange('family_size', val ? parseInt(val, 10) : undefined);
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   placeholder="Number of family members"
                 />
@@ -356,8 +396,11 @@ export default function ProfilePage() {
                   </label>
                   <input
                     type="number"
-                    value={profile.disability_percentage || ''}
-                    onChange={(e) => handleInputChange('disability_percentage', parseInt(e.target.value) || undefined)}
+                    value={profile.disability_percentage ?? ''}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      handleInputChange('disability_percentage', val ? parseInt(val, 10) : undefined);
+                    }}
                     className="w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                     placeholder="Enter percentage"
                     min="0"
@@ -382,11 +425,16 @@ export default function ProfilePage() {
           </div>
 
           {/* Submit Button */}
-          <div className="flex justify-end">
+          <div className="flex justify-between items-center">
+            {lastSaved && (
+              <p className="text-sm text-gray-500">
+                Last saved: {lastSaved.toLocaleTimeString()}
+              </p>
+            )}
             <button
               type="submit"
               disabled={saving}
-              className="flex items-center px-6 py-3 bg-yellow-500 text-black rounded-md hover:bg-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+              className="ml-auto flex items-center px-6 py-3 bg-yellow-500 text-black rounded-md hover:bg-yellow-400 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
             >
               {saving ? (
                 <>

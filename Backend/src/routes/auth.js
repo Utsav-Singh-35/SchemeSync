@@ -213,6 +213,9 @@ router.put('/profile', authenticateToken, validate('profileUpdate'), async (req,
     try {
         const userId = req.user.userId;
         const profileData = req.validatedData;
+        
+        console.log('📝 Profile update request for user:', userId);
+        console.log('📦 Validated data:', profileData);
 
         // Check if profile exists
         const existingProfile = await db.get('SELECT id FROM user_profiles WHERE user_id = ?', [userId]);
@@ -231,11 +234,16 @@ router.put('/profile', authenticateToken, validate('profileUpdate'), async (req,
 
             if (updateFields.length > 0) {
                 updateValues.push(userId);
-                await db.run(`
+                const query = `
                     UPDATE user_profiles 
                     SET ${updateFields.join(', ')}, updated_at = CURRENT_TIMESTAMP
                     WHERE user_id = ?
-                `, updateValues);
+                `;
+                console.log('🔄 Update query:', query);
+                console.log('🔄 Update values:', updateValues);
+                
+                const result = await db.run(query, updateValues);
+                console.log('✅ Update result:', result);
             }
         } else {
             // Create new profile
@@ -249,10 +257,14 @@ router.put('/profile', authenticateToken, validate('profileUpdate'), async (req,
                 }
             });
 
-            await db.run(`
+            const query = `
                 INSERT INTO user_profiles (${profileFields.join(', ')})
                 VALUES (${profileFields.map(() => '?').join(', ')})
-            `, profileValues);
+            `;
+            console.log('➕ Insert query:', query);
+            console.log('➕ Insert values:', profileValues);
+            
+            await db.run(query, profileValues);
         }
 
         res.json({
