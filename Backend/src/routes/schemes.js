@@ -3,10 +3,12 @@ const { getDatabase } = require('../database/connection');
 const { validateQuery, validate } = require('../middleware/validation');
 const { authenticateToken, optionalAuth } = require('../middleware/auth');
 const EligibilityEngine = require('../services/eligibilityEngine');
+const RecommendationAgent = require('../services/recommendationAgent');
 
 const router = express.Router();
 const db = getDatabase();
 const eligibilityEngine = new EligibilityEngine();
+const recommendationAgent = new RecommendationAgent();
 
 // Search schemes with FTS5
 router.get('/search', optionalAuth, validateQuery('schemeSearch'), async (req, res) => {
@@ -108,7 +110,82 @@ router.get('/search', optionalAuth, validateQuery('schemeSearch'), async (req, r
     }
 });
 
-// Get scheme by ID
+// Get recommended schemes for authenticated user
+router.get('/recommended/me', authenticateToken, async (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit) || 6;
+        const result = await recommendationAgent.getRecommendations(req.user.userId, limit);
+
+        res.json({
+            success: true,
+            data: {
+                schemes: result.recommendations.map(r => ({
+                    ...r.scheme,
+                    recommendation: {
+                        score: r.score,
+                        reasons: r.reasons,
+                        matchedOn: r.matchedOn
+                    }
+                })),
+                profileCompleteness: result.profileCompleteness,
+                totalEvaluated: result.totalEvaluated
+            }
+        });
+    } catch (error) {
+        console.error('Recommendation error:', error);
+        res.status(500).json({ success: false, message: 'Error generating recommendations' });
+    }
+});
+
+// Get eligible schemes for authenticated user
+router.get('/eligible/me', authenticateToken, async (req, res) => {
+    try {
+        const eligibilityResults = await eligibilityEngine.evaluateUserEligibility(
+            req.user.userId
+        );
+
+        const eligibleSchemes = eligibilityResults.filter(result => 
+            result.eligibility.status === 'eligible' || 
+            result.eligibility.status === 'likely_eligible'
+        );
+
+        eligibleSchemes.sort((a, b) => b.eligibility.score - a.eligibility.score);
+
+        res.json({
+            success: true,
+            data: {
+                schemes: eligibleSchemes.map(result => ({
+                    ...result.scheme,
+                    eligibility: result.eligibility
+                })),
+                totalEligible: eligibleSchemes.length,
+                totalEvaluated: eligibilityResults.length
+            }
+        });
+    } catch (error) {
+        console.error('Eligibility check error:', error);
+        res.status(500).json({ success: false, message: 'Error checking scheme eligibility' });
+    }
+});
+
+// Get scheme categories
+router.get('/categories/list', async (req, res) => {
+    try {
+        const categories = await db.query(`
+            SELECT category, COUNT(*) as scheme_count 
+            FROM schemes 
+            WHERE is_active = 1 AND category IS NOT NULL 
+            GROUP BY category 
+            ORDER BY scheme_count DESC
+        `);
+        res.json({ success: true, data: categories });
+    } catch (error) {
+        console.error('Categories error:', error);
+        res.status(500).json({ success: false, message: 'Error fetching categories' });
+    }
+});
+
+// Get scheme by ID  ← must be LAST among GET routes
 router.get('/:id', optionalAuth, async (req, res) => {
     try {
         const schemeId = parseInt(req.params.id);
@@ -161,66 +238,6 @@ router.get('/:id', optionalAuth, async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error fetching scheme details'
-        });
-    }
-});
-
-// Get eligible schemes for authenticated user
-router.get('/eligible/me', authenticateToken, async (req, res) => {
-    try {
-        const eligibilityResults = await eligibilityEngine.evaluateUserEligibility(
-            req.user.userId
-        );
-
-        // Filter for eligible and likely eligible schemes
-        const eligibleSchemes = eligibilityResults.filter(result => 
-            result.eligibility.status === 'eligible' || 
-            result.eligibility.status === 'likely_eligible'
-        );
-
-        // Sort by eligibility score
-        eligibleSchemes.sort((a, b) => b.eligibility.score - a.eligibility.score);
-
-        res.json({
-            success: true,
-            data: {
-                schemes: eligibleSchemes.map(result => ({
-                    ...result.scheme,
-                    eligibility: result.eligibility
-                })),
-                totalEligible: eligibleSchemes.length,
-                totalEvaluated: eligibilityResults.length
-            }
-        });
-    } catch (error) {
-        console.error('Eligibility check error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Error checking scheme eligibility'
-        });
-    }
-});
-
-// Get scheme categories
-router.get('/categories/list', async (req, res) => {
-    try {
-        const categories = await db.query(`
-            SELECT category, COUNT(*) as scheme_count 
-            FROM schemes 
-            WHERE is_active = 1 AND category IS NOT NULL 
-            GROUP BY category 
-            ORDER BY scheme_count DESC
-        `);
-
-        res.json({
-            success: true,
-            data: categories
-        });
-    } catch (error) {
-        console.error('Categories error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Error fetching categories'
         });
     }
 });

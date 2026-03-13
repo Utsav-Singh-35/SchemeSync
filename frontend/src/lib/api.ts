@@ -55,6 +55,11 @@ export interface Scheme {
     reasons: string[];
     missing_criteria: string[];
   };
+  recommendation?: {
+    score: number;
+    reasons: string[];
+    matchedOn: string[];
+  };
 }
 
 export interface User {
@@ -135,6 +140,11 @@ export const schemesAPI = {
 
   getEligible: async (params: { limit?: number; offset?: number }) => {
     const response = await api.get('/schemes/eligible/me', { params });
+    return response.data;
+  },
+
+  getRecommended: async (params: { limit?: number }) => {
+    const response = await api.get('/schemes/recommended/me', { params });
     return response.data;
   },
 
