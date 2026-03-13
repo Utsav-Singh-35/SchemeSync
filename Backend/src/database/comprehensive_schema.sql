@@ -228,6 +228,23 @@ CREATE TABLE IF NOT EXISTS crawler_runs (
     status TEXT DEFAULT 'running' CHECK(status IN ('running', 'completed', 'failed'))
 );
 
+-- Browser automation sessions
+CREATE TABLE IF NOT EXISTS automation_sessions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    scheme_id TEXT NOT NULL,
+    session_id TEXT UNIQUE NOT NULL,
+    application_url TEXT NOT NULL,
+    status TEXT DEFAULT 'pending' CHECK(status IN ('pending', 'running', 'completed', 'failed', 'closed')),
+    fields_found INTEGER DEFAULT 0,
+    fields_filled INTEGER DEFAULT 0,
+    error_message TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (scheme_id) REFERENCES schemes(id) ON DELETE CASCADE
+);
+
 -- Indexes for performance
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_user_profiles_user_id ON user_profiles(user_id);
@@ -243,3 +260,5 @@ CREATE INDEX IF NOT EXISTS idx_applications_user ON applications(user_id);
 CREATE INDEX IF NOT EXISTS idx_applications_scheme ON applications(scheme_id);
 CREATE INDEX IF NOT EXISTS idx_saved_schemes_user ON saved_schemes(user_id);
 CREATE INDEX IF NOT EXISTS idx_user_documents_user ON user_documents(user_id);
+CREATE INDEX IF NOT EXISTS idx_automation_sessions_user ON automation_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_automation_sessions_session ON automation_sessions(session_id);

@@ -48,6 +48,7 @@ export interface Scheme {
   contact_information: any;
   reference_links: string;
   last_updated: string;
+  application_url?: string; // Optional application URL
   eligibility?: {
     status: 'eligible' | 'not_eligible' | 'likely_eligible' | 'insufficient_data';
     score: number;
@@ -154,6 +155,32 @@ export const schemesAPI = {
 
   getStats: async () => {
     const response = await api.get('/schemes/stats/overview');
+    return response.data;
+  },
+};
+
+// Browser Automation API
+export const automationAPI = {
+  fillForm: async (schemeId: string, applicationUrl: string) => {
+    const response = await api.post('/automation/fill-form', {
+      schemeId,
+      applicationUrl
+    });
+    return response.data;
+  },
+
+  getSession: async (sessionId: string) => {
+    const response = await api.get(`/automation/session/${sessionId}`);
+    return response.data;
+  },
+
+  getHistory: async (params: { limit?: number; offset?: number }) => {
+    const response = await api.get('/automation/history', { params });
+    return response.data;
+  },
+
+  closeSession: async (sessionId: string) => {
+    const response = await api.delete(`/automation/session/${sessionId}`);
     return response.data;
   },
 };

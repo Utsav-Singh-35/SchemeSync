@@ -11,6 +11,7 @@ const authRoutes = require('./routes/auth');
 const schemeRoutes = require('./routes/comprehensive_schemes');
 const familyRoutes = require('./routes/family');
 const applicationRoutes = require('./routes/applications');
+const automationRoutes = require('./routes/automation');
 
 class SchemeSync {
     constructor() {
@@ -102,6 +103,7 @@ class SchemeSync {
         this.app.use('/api/schemes', schemeRoutes);
         this.app.use('/api/family', familyRoutes);
         this.app.use('/api/applications', applicationRoutes);
+        this.app.use('/api/automation', automationRoutes);
 
         // Admin routes
         this.setupAdminRoutes();

@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { Scheme } from '@/lib/api';
+import { Scheme, automationAPI } from '@/lib/api';
 import { BookmarkIcon as BookmarkOutline } from '@heroicons/react/24/outline';
-import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
+import { BookmarkIcon as BookmarkSolid, CpuChipIcon } from '@heroicons/react/24/solid';
+import toast from 'react-hot-toast';
 
 interface SchemeCardProps {
   scheme: Scheme;
@@ -11,6 +12,7 @@ interface SchemeCardProps {
   onRemove?: (id: number) => void;
   isSaved?: boolean;
   showEligibility?: boolean;
+  showApplyButton?: boolean;
 }
 
 export default function SchemeCard({ 
@@ -18,7 +20,8 @@ export default function SchemeCard({
   onSave, 
   onRemove, 
   isSaved = false,
-  showEligibility = true 
+  showEligibility = true,
+  showApplyButton = true
 }: SchemeCardProps) {
   const handleBookmark = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -26,6 +29,55 @@ export default function SchemeCard({
       onRemove(scheme.id);
     } else if (!isSaved && onSave) {
       onSave(scheme.id);
+    }
+  };
+
+  const handleAutoFill = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    // Use actual application URL from scheme data or construct one
+    const applicationUrl = scheme.application_url || 
+                          scheme.reference_links_array?.find((link: any) => 
+                            link.url.includes('apply') || 
+                            link.url.includes('application') ||
+                            link.url.includes('form')
+                          )?.url ||
+                          `https://www.myscheme.gov.in/schemes/${scheme.slug}`;
+    
+    try {
+      toast.loading('Starting automated form filling...', { id: 'autofill' });
+      
+      const result = await automationAPI.fillForm(scheme.id.toString(), applicationUrl);
+      
+      if (result.success) {
+        toast.success(
+          `✅ ${result.data.fieldsFilled}/${result.data.fieldsFound} fields filled!`, 
+          { 
+            id: 'autofill',
+            duration: 4000
+          }
+        );
+        
+        // Open the browser session with pre-filled form
+        setTimeout(() => {
+          window.open(result.data.continueUrl, '_blank', 'noopener,noreferrer');
+        }, 1000);
+      } else {
+        toast.error('Auto-fill failed. Opening manual form...', { id: 'autofill' });
+        
+        // Fallback to manual application
+        setTimeout(() => {
+          window.open(applicationUrl, '_blank', 'noopener,noreferrer');
+        }, 1500);
+      }
+    } catch (error: any) {
+      console.error('Auto-fill error:', error);
+      toast.error('Auto-fill unavailable. Opening manual form...', { id: 'autofill' });
+      
+      // Fallback to manual application
+      setTimeout(() => {
+        window.open(applicationUrl, '_blank', 'noopener,noreferrer');
+      }, 1500);
     }
   };
 
@@ -117,12 +169,23 @@ export default function SchemeCard({
         <div className="text-xs text-gray-500">
           Updated: {new Date(scheme.last_updated).toLocaleDateString()}
         </div>
-        <Link
-          href={`/schemes/${scheme.slug}`}
-          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-        >
-          View Details →
-        </Link>
+        <div className="flex items-center space-x-2">
+          {showApplyButton && (
+            <button
+              onClick={handleAutoFill}
+              className="flex items-center px-3 py-1 bg-green-600 text-white text-xs font-medium rounded-md hover:bg-green-700 transition-colors"
+            >
+              <CpuChipIcon className="h-3 w-3 mr-1" />
+              Auto-Fill
+            </button>
+          )}
+          <Link
+            href={`/schemes/${scheme.slug}`}
+            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          >
+            View Details →
+          </Link>
+        </div>
       </div>
     </div>
   );

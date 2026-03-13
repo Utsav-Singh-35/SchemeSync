@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { schemesAPI } from '@/lib/api';
+import { schemesAPI, automationAPI } from '@/lib/api';
 import Header from '@/components/Header';
 import Link from 'next/link';
 import { 
@@ -15,7 +15,7 @@ import {
   XCircleIcon,
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
-import { BookmarkIcon as BookmarkSolid } from '@heroicons/react/24/solid';
+import { BookmarkIcon as BookmarkSolid, CpuChipIcon } from '@heroicons/react/24/solid';
 import toast from 'react-hot-toast';
 
 interface EligibilityResult {
@@ -100,6 +100,85 @@ export default function SchemeDetailPage() {
       toast.error('Failed to update saved status');
     } finally {
       setSavingScheme(false);
+    }
+  };
+
+  const handleAutoFill = async () => {
+    if (!user || !scheme) {
+      toast.error('Please login to use auto-fill');
+      return;
+    }
+    
+    // Use actual application URL from scheme data or construct one
+    const applicationUrl = scheme.application_url || 
+                          scheme.reference_links_array?.find(link => 
+                            link.url.includes('apply') || 
+                            link.url.includes('application') ||
+                            link.url.includes('form')
+                          )?.url ||
+                          `https://www.myscheme.gov.in/schemes/${scheme.slug}`;
+    
+    try {
+      toast.loading('Starting automated form filling...', { id: 'autofill' });
+      
+      const result = await automationAPI.fillForm(scheme.id.toString(), applicationUrl);
+      
+      if (result.success) {
+        toast.success(
+          `✅ Form auto-filled successfully!\n${result.data.fieldsFilled} out of ${result.data.fieldsFound} fields completed.`, 
+          { 
+            id: 'autofill',
+            duration: 5000
+          }
+        );
+        
+        // Show detailed success message
+        const continueMessage = result.data.instructions || 'Click to continue in browser and review the form.';
+        
+        // Create a confirmation dialog
+        const shouldContinue = window.confirm(
+          `Form filling completed!\n\n` +
+          `• Fields filled: ${result.data.fieldsFilled}/${result.data.fieldsFound}\n` +
+          `• Target site: ${new URL(result.data.finalUrl || result.data.initialUrl).hostname}\n\n` +
+          `${continueMessage}\n\n` +
+          `Click OK to open the pre-filled form in a new tab.`
+        );
+        
+        if (shouldContinue) {
+          // Open the browser session with pre-filled form
+          window.open(result.data.continueUrl, '_blank', 'noopener,noreferrer');
+        }
+      } else {
+        toast.error(
+          result.message || 'Auto-fill failed. Please try manual application.', 
+          { id: 'autofill' }
+        );
+        
+        // Offer fallback to manual application
+        const tryManual = window.confirm(
+          'Automated form filling failed.\n\n' +
+          'Would you like to open the application page manually?'
+        );
+        
+        if (tryManual) {
+          window.open(applicationUrl, '_blank', 'noopener,noreferrer');
+        }
+      }
+    } catch (error: any) {
+      console.error('Auto-fill error:', error);
+      const errorMessage = error.response?.data?.message || 'Auto-fill service unavailable';
+      
+      toast.error(`❌ ${errorMessage}`, { id: 'autofill' });
+      
+      // Offer fallback to manual application
+      const tryManual = window.confirm(
+        `Automation failed: ${errorMessage}\n\n` +
+        'Would you like to open the application page manually?'
+      );
+      
+      if (tryManual) {
+        window.open(applicationUrl, '_blank', 'noopener,noreferrer');
+      }
     }
   };
 
@@ -256,18 +335,27 @@ export default function SchemeDetailPage() {
             </div>
             
             {user && (
-              <button
-                onClick={handleSaveToggle}
-                disabled={savingScheme}
-                className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
-              >
-                {isSaved ? (
-                  <BookmarkSolid className="h-6 w-6" />
-                ) : (
-                  <BookmarkOutline className="h-6 w-6" />
-                )}
-                <span>{isSaved ? 'Saved' : 'Save'}</span>
-              </button>
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={handleAutoFill}
+                  className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  <CpuChipIcon className="h-5 w-5" />
+                  <span>Auto-Fill Form</span>
+                </button>
+                <button
+                  onClick={handleSaveToggle}
+                  disabled={savingScheme}
+                  className="flex items-center space-x-2 text-gray-600 hover:text-blue-600 transition-colors"
+                >
+                  {isSaved ? (
+                    <BookmarkSolid className="h-6 w-6" />
+                  ) : (
+                    <BookmarkOutline className="h-6 w-6" />
+                  )}
+                  <span>{isSaved ? 'Saved' : 'Save'}</span>
+                </button>
+              </div>
             )}
           </div>
 
