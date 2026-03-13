@@ -1,7 +1,7 @@
 // Popup Script for SchemeSync Extension
 class PopupController {
   constructor() {
-    this.API_BASE = 'http://localhost:3000/api';
+    this.API_BASE = 'http://localhost:3003/api';
     this.init();
   }
 
@@ -23,7 +23,7 @@ class PopupController {
       this.showLoginRequired();
       return false;
     }
-
+    
     return true;
   }
 
@@ -44,7 +44,7 @@ class PopupController {
       this.displayTabInfo(tab, hasFormsResult);
     } catch (error) {
       console.error('Tab info error:', error);
-      this.showTabInfo(null, null);
+      this.displayTabInfo(null, null);
     }
   }
 
@@ -79,7 +79,7 @@ class PopupController {
       </div>
       
       <div class="actions">
-        <button class="btn" onclick="this.openSchemeSync()">
+        <button class="btn" id="open-schemesync-btn">
           Open SchemeSync Portal
         </button>
       </div>
@@ -116,14 +116,14 @@ class PopupController {
       
       <div class="actions">
         ${hasForms ? `
-          <button class="btn" onclick="this.activateAutofill()">
+          <button class="btn" id="activate-autofill-btn">
             Activate Autofill
           </button>
         ` : ''}
-        <button class="btn secondary" onclick="this.openProfile()">
+        <button class="btn secondary" id="open-profile-btn">
           Manage Profile
         </button>
-        <button class="btn secondary" onclick="this.viewHistory()">
+        <button class="btn secondary" id="view-history-btn">
           View History
         </button>
       </div>
@@ -206,17 +206,17 @@ class PopupController {
   }
 
   openSchemeSync() {
-    chrome.tabs.create({ url: 'http://localhost:5173' });
+    chrome.tabs.create({ url: 'http://localhost:3000' });
     window.close();
   }
 
   openProfile() {
-    chrome.tabs.create({ url: 'http://localhost:5173/profile' });
+    chrome.tabs.create({ url: 'http://localhost:3000/profile' });
     window.close();
   }
 
   viewHistory() {
-    chrome.tabs.create({ url: 'http://localhost:5173/dashboard' });
+    chrome.tabs.create({ url: 'http://localhost:3000/dashboard' });
     window.close();
   }
 
@@ -228,7 +228,7 @@ class PopupController {
       </div>
       
       <div class="actions">
-        <button class="btn secondary" onclick="location.reload()">
+        <button class="btn secondary" id="retry-btn">
           Retry
         </button>
       </div>
@@ -238,14 +238,26 @@ class PopupController {
 
 // Initialize popup when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  new PopupController();
+  const popup = new PopupController();
+  
+  // Handle button clicks
+  document.addEventListener('click', (e) => {
+    switch (e.target.id) {
+      case 'open-schemesync-btn':
+        popup.openSchemeSync();
+        break;
+      case 'activate-autofill-btn':
+        popup.activateAutofill();
+        break;
+      case 'open-profile-btn':
+        popup.openProfile();
+        break;
+      case 'view-history-btn':
+        popup.viewHistory();
+        break;
+      case 'retry-btn':
+        location.reload();
+        break;
+    }
+  });
 });
-
-// Make functions available globally for onclick handlers
-window.activateAutofill = () => popup.activateAutofill();
-window.openSchemeSync = () => popup.openSchemeSync();
-window.openProfile = () => popup.openProfile();
-window.viewHistory = () => popup.viewHistory();
-
-// Store popup instance globally
-let popup;

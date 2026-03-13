@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3003/api';
 
 // Create axios instance
 const api = axios.create({
@@ -202,7 +202,7 @@ export const extensionAPI = {
     });
   },
 
-  // Trigger extension autofill by opening URL and dispatching event
+  // Trigger extension autofill by dispatching event to content script
   triggerAutofill: async (schemeId: string, applicationUrl: string) => {
     return new Promise((resolve, reject) => {
       if (typeof window === 'undefined') {
@@ -210,22 +210,40 @@ export const extensionAPI = {
         return;
       }
 
-      // Open the application URL
-      const newWindow = window.open(applicationUrl, '_blank', 'noopener,noreferrer');
-      
-      if (!newWindow) {
-        reject(new Error('Popup blocked - please allow popups for this site'));
-        return;
-      }
+      console.log('🚀 Triggering extension autofill:', { schemeId, applicationUrl });
 
-      // The extension will detect the new tab and activate automatically
-      // Return success immediately since extension handles the rest
-      resolve({
-        success: true,
-        message: 'Application page opened - extension will activate automatically',
-        applicationUrl,
-        schemeId
+      // Set up response listener
+      let responseReceived = false;
+      
+      const responseHandler = (event: any) => {
+        console.log('📨 Extension response received:', event.detail);
+        responseReceived = true;
+        document.removeEventListener('schemesync-autofill-response', responseHandler);
+        
+        if (event.detail.success) {
+          resolve(event.detail);
+        } else {
+          reject(new Error(event.detail.error || 'Extension autofill failed'));
+        }
+      };
+      
+      document.addEventListener('schemesync-autofill-response', responseHandler);
+      
+      // Dispatch autofill trigger event to extension
+      const triggerEvent = new CustomEvent('schemesync-trigger-autofill', {
+        detail: { schemeId, applicationUrl }
       });
+      
+      console.log('📡 Dispatching autofill trigger event');
+      document.dispatchEvent(triggerEvent);
+      
+      // Timeout after 5 seconds
+      setTimeout(() => {
+        if (!responseReceived) {
+          document.removeEventListener('schemesync-autofill-response', responseHandler);
+          reject(new Error('Extension did not respond within 5 seconds'));
+        }
+      }, 5000);
     });
   },
 

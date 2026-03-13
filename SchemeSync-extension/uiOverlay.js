@@ -262,7 +262,7 @@ class UIOverlay {
       <button class="schemesync-close">&times;</button>
       <h2>Error</h2>
       <div class="schemesync-error-message">${message}</div>
-      <button class="schemesync-button" onclick="this.closest('.schemesync-overlay').remove()">
+      <button class="schemesync-button" data-action="close-error">
         Close
       </button>
     `;
@@ -318,7 +318,7 @@ class UIOverlay {
       
       <p><strong>Important:</strong> Please review all filled information before submitting the form. SchemeSync does not automatically submit forms for your safety.</p>
       
-      <button class="schemesync-button" onclick="this.closest('.schemesync-overlay').remove()">
+      <button class="schemesync-button" data-action="close-success">
         Continue with Form
       </button>
     `;
@@ -358,16 +358,16 @@ class UIOverlay {
       const saveBtn = modal.querySelector('#save-field-btn');
       const skipBtn = modal.querySelector('#skip-field-btn');
 
-      saveBtn.onclick = () => {
+      saveBtn.addEventListener('click', () => {
         const value = input.value.trim();
         this.hideOverlay();
         resolve(value || null);
-      };
+      });
 
-      skipBtn.onclick = () => {
+      skipBtn.addEventListener('click', () => {
         this.hideOverlay();
         resolve(null);
-      };
+      });
 
       // Handle Enter key
       input.onkeypress = (e) => {
@@ -402,7 +402,7 @@ class UIOverlay {
       <div class="schemesync-error-message">
         Autofill has been paused. Once you solve the CAPTCHA, you can resume the process.
       </div>
-      <button class="schemesync-button" onclick="this.closest('.schemesync-overlay').remove()">
+      <button class="schemesync-button" data-action="close-captcha">
         I'll Solve the CAPTCHA
       </button>
     `;

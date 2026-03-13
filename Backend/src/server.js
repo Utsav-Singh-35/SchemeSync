@@ -14,6 +14,7 @@ const applicationRoutes = require('./routes/applications');
 const automationRoutes = require('./routes/automation');
 const userRoutes = require('./routes/user');
 const autofillRoutes = require('./routes/autofill');
+const navigationRoutes = require('./routes/navigation');
 
 class SchemeSync {
     constructor() {
@@ -51,8 +52,10 @@ class SchemeSync {
                 directives: {
                     defaultSrc: ["'self'"],
                     styleSrc: ["'self'", "'unsafe-inline'"],
-                    scriptSrc: ["'self'"],
+                    scriptSrc: ["'self'", "'unsafe-inline'", "'wasm-unsafe-eval'", "'inline-speculation-rules'", "http://localhost:*", "http://127.0.0.1:*"],
                     imgSrc: ["'self'", "data:", "https:"],
+                    connectSrc: ["'self'", "http://localhost:*", "http://127.0.0.1:*"],
+                    workerSrc: ["'self'", "blob:"],
                 },
             },
         }));
@@ -60,7 +63,7 @@ class SchemeSync {
         // CORS configuration
         this.app.use(cors({
             origin: process.env.NODE_ENV === 'production' 
-                ? ['https://yourdomain.com'] // Replace with actual domain
+                ? ['https://yourdomain.com', 'http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http://localhost:5173'] // Allow localhost in production for development
                 : ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http://localhost:5173'],
             credentials: true
         }));
@@ -108,6 +111,7 @@ class SchemeSync {
         this.app.use('/api/automation', automationRoutes);
         this.app.use('/api/user', userRoutes);
         this.app.use('/api/autofill', autofillRoutes);
+        this.app.use('/api/navigation', navigationRoutes);
 
         // Admin routes
         this.setupAdminRoutes();
