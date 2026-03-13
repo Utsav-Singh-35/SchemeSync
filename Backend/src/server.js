@@ -9,6 +9,7 @@ const { getDatabase } = require('./database/connection');
 // Import routes
 const authRoutes = require('./routes/auth');
 const schemeRoutes = require('./routes/comprehensive_schemes');
+const voiceRoutes = require('./routes/voice');
 const familyRoutes = require('./routes/family');
 const applicationRoutes = require('./routes/applications');
 const automationRoutes = require('./routes/automation');
@@ -106,6 +107,7 @@ class SchemeSync {
         // API routes
         this.app.use('/api/auth', authRoutes);
         this.app.use('/api/schemes', schemeRoutes);
+        this.app.use('/api/voice', voiceRoutes);
         this.app.use('/api/family', familyRoutes);
         this.app.use('/api/applications', applicationRoutes);
         this.app.use('/api/automation', automationRoutes);

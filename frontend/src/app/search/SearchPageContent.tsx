@@ -41,11 +41,54 @@ export default function SearchPageContent() {
     }
   }, [initialQuery]);
 
+  // Listen for voice commands from VoiceAgent (only fires when already on this page)
+  useEffect(() => {
+    const onSearch = (e: CustomEvent) => {
+      const { entities } = e.detail;
+      if (entities.query) setQuery(entities.query);
+      setFilters(prev => ({
+        ...prev,
+        category: entities.category || prev.category,
+        level: entities.level || prev.level,
+        state: entities.state || prev.state,
+        beneficiary: entities.beneficiary || prev.beneficiary,
+      }));
+      setTimeout(() => performSearch(1), 50);
+    };
+
+    const onFilter = (e: CustomEvent) => {
+      const { entities } = e.detail;
+      setFilters(prev => ({
+        ...prev,
+        category: entities.category || prev.category,
+        level: entities.level || prev.level,
+        state: entities.state || prev.state,
+        beneficiary: entities.beneficiary || prev.beneficiary,
+      }));
+      setTimeout(() => performSearch(1), 50);
+    };
+
+    const onClear = () => {
+      setFilters({ category: '', ministry: '', level: '', beneficiary: '', state: '' });
+      setQuery('');
+      setTimeout(() => performSearch(1), 50);
+    };
+
+    window.addEventListener('voice-search', onSearch as EventListener);
+    window.addEventListener('voice-filter', onFilter as EventListener);
+    window.addEventListener('voice-clear', onClear);
+    return () => {
+      window.removeEventListener('voice-search', onSearch as EventListener);
+      window.removeEventListener('voice-filter', onFilter as EventListener);
+      window.removeEventListener('voice-clear', onClear);
+    };
+  }, []);
+
   const loadSavedSchemes = async () => {
     try {
       const response = await schemesAPI.getSaved({ limit: 1000, offset: 0 });
       if (response.success) {
-        const savedIds = new Set(response.data.schemes.map((s: Scheme) => s.id));
+        const savedIds = new Set<number>(response.data.schemes.map((s: Scheme) => s.id));
         setSavedSchemeIds(savedIds);
       }
     } catch (error) {
