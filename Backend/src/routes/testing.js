@@ -25,7 +25,7 @@ State governments and union territories actively participate in the scheme by no
   benefits: `Financial Assistance:\n- Monthly stipend of ₹2,000 for undergraduate (UG) students\n- Monthly stipend of ₹3,000 for postgraduate (PG) students\n- One-time book and stationery grant of ₹5,000 per academic year\n- Laptop assistance of ₹15,000 (one-time, for students without a personal computer)\n\nAdditional Support:\n- Tuition fee reimbursement up to ₹20,000 per year for students in professional courses (Engineering, Medical, Law)\n- Hostel allowance of ₹1,000/month for students residing in government-approved hostels outside their home district\n- Special disability allowance of ₹500/month for PwD scholars\n\nRecognition:\n- Certificate of Merit issued by the Ministry of Education upon successful completion of the course\n- Priority consideration for government internship programs and fellowship opportunities\n- Alumni network access for career guidance and mentorship`,
   application_process: '1. Visit the National Scholarship Portal (scholarships.gov.in)\n2. Register with Aadhaar number\n3. Fill in academic and income details\n4. Upload required documents\n5. Submit before the deadline',
   required_documents: 'Aadhaar Card\nIncome Certificate\nMarksheet of last qualifying exam\nBank account details\nAdmission letter from university',
-  application_url: 'https://scholarships.gov.in',
+  application_url: 'https://test-scheme-seven.vercel.app/',
   reference_links: 'National Scholarship Portal: https://scholarships.gov.in\nMinistry of Education: https://education.gov.in',
   contact_information: {
     helpline: '1800-11-2199',
